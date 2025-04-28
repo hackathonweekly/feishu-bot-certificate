@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build In Public 活动证书</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            padding: 20px;
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            background: linear-gradient(180deg, #b7c8f6 0%, #e0d6f6 100%);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .left-panel {
+            flex: 1;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ecfb 100%);
+            box-shadow: inset -5px 0 15px -5px rgba(0, 0, 0, 0.05);
+        }
+        .left-panel h2 {
+            color: #6c5ce7;
+            margin-bottom: 25px;
+            font-size: 24px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(108, 92, 231, 0.2);
+            position: relative;
+        }
+        .left-panel h2:after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background-color: #6c5ce7;
+        }
+        .right-panel {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
+            background-color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .right-panel:before {
+            content: "hackathonweekly";
+            position: absolute;
+            font-size: 120px;
+            font-weight: bold;
+            opacity: 0.03;
+            transform: rotate(-45deg);
+            white-space: nowrap;
+            top: 50%;
+            left: 50%;
+            transform-origin: center;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            color: #6c5ce7;
+            z-index: 0;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #6c5ce7;
+            font-size: 16px;
+        }
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        button {
+            padding: 14px 20px;
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(108, 92, 231, 0.2);
+        }
+        button:hover {
+            background-color: #5b4dd1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(108, 92, 231, 0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button#saveImage {
+            background-color: #00b894;
+        }
+        button#saveImage:hover {
+            background-color: #00a381;
+        }
+        .certificate {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            min-height: 500px;
+            padding: 50px;
+            background-color: #fff;
+            border: 20px solid #f5f5f5;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            z-index: 1;
+            border-radius: 10px;
+            background-image: 
+                radial-gradient(circle at top left, rgba(108, 92, 231, 0.05) 10%, transparent 80%),
+                radial-gradient(circle at bottom right, rgba(0, 184, 148, 0.05) 10%, transparent 80%);
+            background: rgba(255,255,255,0.95);
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(80, 60, 180, 0.10);
+            border: none;
+            padding: 56px 40px 32px 40px;
+            max-width: 700px;
+            min-height: 520px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .certificate:before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+        .certificate:after {
+            content: "hackathonweekly";
+            position: absolute;
+            font-size: 120px;
+            font-weight: bold;
+            opacity: 0.03;
+            transform: rotate(-45deg);
+            white-space: nowrap;
+            top: 50%;
+            left: 50%;
+            transform-origin: center;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            color: #6c5ce7;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .certificate-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .certificate-logo {
+            max-width: 120px;
+            margin: 0 auto 20px;
+        }
+        .certificate-title {
+            font-size: 44px;
+            font-weight: 900;
+            color: #7c3aed;
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+            text-shadow: 0 2px 8px rgba(124,58,237,0.08);
+        }
+        .certificate-title:before, .certificate-title:after {
+            content: "★";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00b894;
+            font-size: 20px;
+        }
+        .certificate-title:before {
+            left: -10px;
+        }
+        .certificate-title:after {
+            right: -10px;
+        }
+        .certificate-content {
+            margin: 40px 0;
+            font-size: 22px;
+            line-height: 1.8;
+            color: #222;
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+            text-align: left;
+            width: 100%;
+            max-width: 540px;
+        }
+        .certificate-content strong {
+            color: #7c3aed;
+            font-size: 26px;
+            font-weight: 900;
+            border-bottom: 2px solid #a78bfa;
+            padding-bottom: 2px;
+        }
+        .certificate-footer {
+            margin-top: 50px;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 32px;
+            text-align: right;
+            width: 100%;
+            max-width: 540px;
+        }
+        .certificate-stamp {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #6c5ce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-15deg);
+            color: #6c5ce7;
+            font-weight: bold;
+            font-size: 14px;
+            background-color: rgba(108, 92, 231, 0.05);
+            line-height: 1.2;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+        .error-message {
+            color: #ff7675;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+            font-size: 16px;
+            padding: 15px;
+            background-color: #fff8f8;
+            border-radius: 10px;
+            border-left: 4px solid #ff7675;
+        }
+        .intro-card {
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            background-image: 
+                radial-gradient(circle at top left, rgba(108, 92, 231, 0.05) 10%, transparent 80%),
+                radial-gradient(circle at bottom right, rgba(0, 184, 148, 0.05) 10%, transparent 80%);
+            background: rgba(255,255,255,0.95);
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(80, 60, 180, 0.10);
+            padding: 56px 40px 32px 40px;
+            max-width: 700px;
+            margin: 0 auto;
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+        }
+        .intro-card h2 {
+            color: #7c3aed;
+            margin-bottom: 24px;
+            font-size: 36px;
+            font-weight: 900;
+        }
+        .intro-card h2:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #7c3aed, transparent);
+        }
+        .intro-card p {
+            margin-bottom: 18px;
+            font-size: 20px;
+            color: #444;
+        }
+        .intro-card .logo {
+            max-width: 160px;
+            margin: 0 auto 30px;
+            display: block;
+        }
+        .intro-card .highlight {
+            color: #6c5ce7;
+            font-weight: bold;
+        }
+        .logo-top {
+            width: 180px;
+            margin-bottom: 32px;
+            border-radius: 24px;
+            background: rgba(120, 80, 255, 0.06);
+            padding: 16px 24px;
+            box-shadow: 0 2px 12px rgba(120, 80, 255, 0.04);
+        }
+        .logo-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            background: linear-gradient(90deg, #e0e7ff 0%, #f3e8ff 100%);
+            border-radius: 20px;
+            padding: 18px 32px;
+            margin-top: 32px;
+            box-shadow: 0 2px 12px rgba(124,58,237,0.06);
+            width: 100%;
+            max-width: 540px;
+        }
+        .logo-bar-img {
+            height: 40px;
+            border-radius: 10px;
+            background: white;
+            padding: 4px 10px;
+            box-shadow: 0 1px 4px rgba(124,58,237,0.04);
+        }
+        
+        /* Build In Public decorative elements */
+        .build-in-public-element {
+            position: absolute;
+            font-size: 12px;
+            color: #6c5ce7;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .element-1 {
+            top: 30px;
+            left: 30px;
+            transform: rotate(-30deg);
+            font-size: 16px;
+        }
+        .element-2 {
+            top: 30px;
+            right: 30px;
+            transform: rotate(30deg);
+            font-size: 16px;
+        }
+        .element-3 {
+            bottom: 30px;
+            left: 30px;
+            transform: rotate(30deg);
+            font-size: 16px;
+        }
+        .build-in-public-border {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+            border: 2px dashed rgba(108, 92, 231, 0.1);
+            border-radius: 5px;
+            pointer-events: none;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .certificate, .intro-card {
+            animation: fadeIn 0.6s ease-out, float 6s ease-in-out infinite;
+        }
+        
+        /* 移动端样式 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 10px;
+            }
+            .left-panel, .right-panel {
+                flex: none;
+                width: 100%;
+            }
+            .right-panel {
+                min-height: 500px;
+            }
+            .certificate {
+                padding: 24px 8px 16px 8px;
+                border-radius: 18px;
+                min-width: unset;
+                max-width: 98vw;
+            }
+            .certificate:before {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+            .certificate-title {
+                font-size: 28px;
+                margin-bottom: 18px;
+            }
+            .certificate-content, .certificate-footer, .logo-bar {
+                max-width: 98vw;
+                font-size: 16px;
+            }
+            .logo-bar {
+                gap: 12px;
+                padding: 8px 4px;
+                border-radius: 10px;
+            }
+            .logo-bar-img {
+                height: 28px;
+                border-radius: 6px;
+                padding: 2px 4px;
+            }
+            .certificate-stamp {
+                width: 70px;
+                height: 70px;
+                bottom: 30px;
+                right: 30px;
+                font-size: 12px;
+            }
+            .intro-card {
+                padding: 24px 8px 16px 8px;
+                border-radius: 18px;
+                min-width: unset;
+                max-width: 98vw;
+            }
+            .logo-top {
+                width: 120px;
+                padding: 8px 10px;
+                border-radius: 12px;
+            }
+        }
+
+        /***** Certificate Redesign *****/
+        .certificate.new-certificate {
+            background: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            min-height: 520px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+        .certificate-content-area {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 64px 32px 48px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+        }
+        .certificate-title.new-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #7c3aed 10%, #a78bfa 90%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-bottom: 2.2rem;
+            letter-spacing: 2px;
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .certificate-content.new-content, .certificate-footer.new-footer {
+            font-size: 1rem;
+            color: #222;
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 1.5rem;
+            opacity: 0.92;
+        }
+        .certificate-content.new-content strong {
+            color: #7c3aed;
+            font-size: 1.2rem;
+            font-weight: 900;
+            border-bottom: 2px solid #a78bfa;
+            padding-bottom: 2px;
+        }
+        .certificate-footer.new-footer {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+        .logo-bottom-left {
+            position: absolute;
+            left: 0;
+            bottom: -32px;
+            width: 120px;
+            border-radius: 24px;
+            background: rgba(120, 80, 255, 0.10);
+            padding: 12px 18px;
+            box-shadow: 0 4px 24px rgba(120, 80, 255, 0.10);
+            z-index: 3;
+        }
+        .decorative-bg {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 600px;
+            height: 340px;
+            background: radial-gradient(circle at 60% 40%, #b7c8f6 0%, #e0d6f6 80%, transparent 100%);
+            filter: blur(48px) saturate(1.2);
+            opacity: 0.65;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .pattern {
+            position: absolute;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .pattern-top-right {
+            top: -30px;
+            right: -30px;
+        }
+        .pattern-bottom-left {
+            left: -20px;
+            bottom: -20px;
+        }
+        /***** Font size shrink *****/
+        .certificate-content-area, .certificate-title.new-title, .certificate-content.new-content, .certificate-footer.new-footer {
+            font-size: 80%;
+        }
+        /***** Intro card minimal style *****/
+        .intro-card.new-intro-card {
+            background: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0 0 32px 0;
+            max-width: 700px;
+            margin: 0 auto 32px auto;
+            text-align: center;
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+        }
+        .intro-card.new-intro-card h2 {
+            font-size: 2rem;
+            color: #7c3aed;
+            font-weight: 900;
+            margin-bottom: 18px;
+        }
+        .intro-card.new-intro-card p {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 12px;
+        }
+        /***** Responsive *****/
+        @media (max-width: 768px) {
+            .certificate.new-certificate {
+                min-height: 320px;
+                max-width: 98vw;
+            }
+            .certificate-content-area {
+                padding: 32px 4vw 24px 4vw;
+                max-width: 98vw;
+            }
+            .logo-bottom-left {
+                width: 70px;
+                padding: 6px 8px;
+                border-radius: 12px;
+                left: 0;
+                bottom: -16px;
+            }
+            .decorative-bg {
+                width: 90vw;
+                height: 180px;
+                filter: blur(28px) saturate(1.2);
+            }
+            .pattern-top-right {
+                top: -18px;
+                right: -18px;
+                width: 80px;
+                height: 80px;
+            }
+            .pattern-bottom-left {
+                left: -10px;
+                bottom: -10px;
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+    <body>
+    <div class="container">
+        <div class="left-panel">
+            <h2>证书查询</h2>
+            <div class="form-group">
+                <label for="periodSelect">活动期名</label>
+                <select id="periodSelect">
+                    <option value="">请选择活动期</option>
+                    <!-- 期数选项将通过 JavaScript 动态加载 -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nicknameInput">昵称</label>
+                <input type="text" id="nicknameInput" placeholder="请输入您的昵称">
+            </div>
+            <div class="button-group">
+                <button id="queryBtn">查询</button>
+                <button id="saveImage">另存图片</button>
+            </div>
+        </div>
+        <div class="right-panel" style="display: flex; justify-content: center; align-items: center;">
+            <iframe
+                id="certificateFrame"
+                src="certificate"
+                style="
+                    aspect-ratio: 1.43/1;
+                    width: 100%;
+                    max-width: 900px;
+                    height: auto;
+                    min-height: 400px;
+                    border: none;
+                    border-radius: 24px;
+                    box-shadow: 0 8px 32px rgba(80,60,180,0.10);
+                    background: transparent;
+                    display: block;
+                "
+                allowtransparency="true"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            ></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const periodSelect = document.getElementById('periodSelect');
+            const nicknameInput = document.getElementById('nicknameInput');
+            const queryBtn = document.getElementById('queryBtn');
+            const saveImageBtn = document.getElementById('saveImage');
+            const certificateFrame = document.getElementById('certificateFrame');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // 加载活动期名称
+            loadPeriods();
+
+            // 查询按钮点击事件
+            queryBtn.addEventListener('click', queryCertificate);
+
+            // 保存图片按钮点击事件
+            saveImageBtn.addEventListener('click', saveCertificateAsImage);
+
+            // 预加载 html2canvas 库
+            function loadHtml2Canvas() {
+                return new Promise((resolve, reject) => {
+                    if (window.html2canvas) {
+                        resolve(window.html2canvas);
+                        return;
+                    }
+                    
+                    const script = document.createElement('script');
+                    script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+                    script.onload = () => resolve(window.html2canvas);
+                    script.onerror = () => reject(new Error("Failed to load html2canvas"));
+                    document.head.appendChild(script);
+                });
+            }
+            
+            // 加载库
+            loadHtml2Canvas().catch(err => console.error("Could not load html2canvas:", err));
+
+            // 加载最近5个已结束的活动
+            async function loadPeriods() {
+                try {
+                    const response = await fetch('/api/periods/completed');
+                    if (response.ok) {
+                        let data = await response.json();
+                        // 按 id 降序排序（如果后端没保证）
+                        data.sort((a, b) => b.id - a.id);
+                        data.forEach((period, idx) => {
+                            const option = document.createElement('option');
+                            option.value = period.id;
+                            option.textContent = period.period_name;
+                            periodSelect.appendChild(option);
+                        });
+                        console.log('加载的活动期:', data);
+                        // 默认选中第一项（如果有数据）
+                        if (data.length > 0) {
+                            periodSelect.selectedIndex = 1; // 0是"请选择活动期"
+                        }
+                    } else {
+                        console.error('Error loading periods:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error loading periods:', error);
+                }
+            }
+
+            // 查询证书
+            async function queryCertificate() {
+                const periodId = periodSelect.value;
+                const nickname = nicknameInput.value.trim();
+
+                if (!periodId || !nickname) {
+                    alert('请选择活动期名并输入昵称');
+                    return;
+                }
+
+                // 获取 period_name
+                const periodOption = periodSelect.options[periodSelect.selectedIndex];
+                const periodName = periodOption.textContent;
+
+                try {
+                    const response = await fetch(`/api/certificate?period_id=${periodId}&nickname=${encodeURIComponent(nickname)}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('cer_content:', data.cer_content);
+                        if (data && data.cer_content) {
+                            // 传递 period、nickname、cerContent 参数给 certificate.html
+                            const params = new URLSearchParams({
+                                period: periodName,
+                                nickname: nickname,
+                                cerContent: data.cer_content
+                            });
+                            certificateFrame.src = `/certificate?${params.toString()}`;
+                        } else {
+                            alert('未找到证书');
+                        }
+                    } else if (response.status === 404) {
+                        alert('未找到证书');
+                    } else {
+                        alert('查询出错');
+                    }
+                } catch (error) {
+                    alert('查询出错');
+                }
+            }
+
+            // 保存证书为图片
+            async function saveCertificateAsImage() {
+                if (!certificateFrame.contentWindow) {
+                    alert('请先查询证书');
+                    return;
+                }
+                
+                try {
+                    console.log('正在尝试截图...');
+                    
+                    // 加载html2canvas（如果还没加载）
+                    if (!window.html2canvas) {
+                        console.log('加载html2canvas库...');
+                        await new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+                            script.onload = () => {
+                                console.log('html2canvas加载成功');
+                                resolve();
+                            };
+                            script.onerror = (e) => {
+                                console.error('html2canvas加载失败', e);
+                                reject(e);
+                            };
+                            document.head.appendChild(script);
+                        });
+                    }
+                    
+                    // 获取当前iframe的样式并复制
+                    let iframeStyle = window.getComputedStyle(certificateFrame);
+                    let iframeWidth = parseInt(iframeStyle.width);
+                    let iframeHeight = parseInt(iframeStyle.height);
+                    
+                    console.log('iframe尺寸:', iframeWidth, 'x', iframeHeight);
+                    
+                    // 获取iframe中的参数，用于重新创建证书内容
+                    const iframeUrl = new URL(certificateFrame.src);
+                    const params = new URLSearchParams(iframeUrl.search);
+                    const period = params.get('period');
+                    const nickname = params.get('nickname');
+                    const cerContent = params.get('cerContent');
+                    
+                    console.log('获取到的证书参数:', { period, nickname, cerContent });
+                    
+                    if (!period || !nickname || !cerContent) {
+                        console.log('找不到证书参数，尝试直接截取iframe');
+                        
+                        try {
+                            // 尝试直接打开证书页面并截图
+                            const certificateWindow = window.open(certificateFrame.src, '_blank');
+                            if (certificateWindow) {
+                                setTimeout(() => {
+                                    // 告诉打开的窗口进行截图
+                                    certificateWindow.alert('请使用浏览器的打印功能(Ctrl+P)保存为PDF或图片，完成后可关闭此页面');
+                                }, 1000);
+                                return;
+                            }
+                        } catch (e) {
+                            console.error('打开证书页面失败:', e);
+                        }
+                    } else {
+                        console.log('使用参数重新创建证书内容进行截图');
+                        
+                        // 预先加载logo图片
+                        const logoImg = new Image();
+                        logoImg.crossOrigin = "anonymous";
+                        logoImg.src = '/certificate/public/img/logo.png';
+                        
+                        await new Promise((resolve) => {
+                            logoImg.onload = resolve;
+                            logoImg.onerror = () => {
+                                console.error('logo图片加载失败');
+                                resolve(); // 继续执行，不阻塞流程
+                            };
+                            // 设置超时，防止图片加载过久
+                            setTimeout(resolve, 2000);
+                        });
+                        
+                        // 将图片转换为Base64
+                        let logoBase64 = '';
+                        try {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = logoImg.width;
+                            canvas.height = logoImg.height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(logoImg, 0, 0);
+                            logoBase64 = canvas.toDataURL('image/png');
+                            console.log('Logo图片转换为Base64成功');
+                        } catch (e) {
+                            console.error('Logo图片转换失败:', e);
+                        }
+                        
+                        // 创建临时样式
+                        const tempStyle = document.createElement('style');
+                        tempStyle.textContent = `
+                            /* 临时证书样式 */
+                            #temp-certificate-container * {
+                                box-sizing: border-box;
+                                margin: 0;
+                                padding: 0;
+                                font-family: 'Microsoft YaHei', 'Inter', sans-serif;
+                            }
+                            #certificate-capture {
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(180deg, #dbeafe 0%, #f3e8ff 100%);
+                                position: relative;
+                                overflow: hidden;
+                            }
+                            .temp-award-bg {
+                                position: absolute;
+                                z-index: 0;
+                                filter: blur(32px) saturate(1.2);
+                                opacity: 0.5;
+                                pointer-events: none;
+                            }
+                            .temp-blob1 {
+                                left: 5%; top: 10%; width: 320px; height: 180px;
+                                background: radial-gradient(circle at 60% 40%, #a78bfa 0%, #dbeafe 80%, transparent 100%);
+                            }
+                            .temp-blob2 {
+                                right: 0; bottom: 0; width: 340px; height: 180px;
+                                background: radial-gradient(circle at 60% 40%, #7c3aed 0%, #f3e8ff 80%, transparent 100%);
+                            }
+                            .temp-award-content {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                height: 100%;
+                                width: 100%;
+                                z-index: 1;
+                                position: relative;
+                            }
+                            .temp-award-inner {
+                                width: 100%;
+                                height: 100%; 
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: space-between;
+                                padding: 40px 40px 20px 40px;
+                            }
+                        `;
+                        document.head.appendChild(tempStyle);
+                        
+                        // 创建一个临时div用于渲染证书内容
+                        const tempDiv = document.createElement('div');
+                        tempDiv.id = 'temp-certificate-container';
+                        tempDiv.style.position = 'fixed';
+                        tempDiv.style.left = '10px';
+                        tempDiv.style.top = '10px';
+                        tempDiv.style.width = iframeWidth + 'px';
+                        tempDiv.style.height = iframeHeight + 'px';
+                        tempDiv.style.zIndex = '9999';
+                        tempDiv.style.overflow = 'hidden';
+                        tempDiv.style.borderRadius = '24px';
+                        tempDiv.style.boxShadow = '0 8px 32px rgba(80,60,180,0.10)';
+                        
+                        tempDiv.innerHTML = `
+                            <div id="certificate-capture">
+                                <!-- 渐变色块装饰 -->
+                                <div class="temp-award-bg temp-blob1"></div>
+                                <div class="temp-award-bg temp-blob2"></div>
+                                
+                                <div class="temp-award-content">
+                                    <div class="temp-award-inner">
+                                        <!-- 标题 -->
+                                        <div style="width: 100%; text-align: center;">
+                                            <h1 style="
+                                                font-size: 2.5rem; 
+                                                font-weight: 900; 
+                                                background-image: linear-gradient(to right, #7e22ce, #a855f7);
+                                                -webkit-background-clip: text;
+                                                -webkit-text-fill-color: transparent;
+                                                background-clip: text;
+                                                text-fill-color: transparent;
+                                                margin-bottom: 0.5rem;
+                                            ">Build In Public 电子奖状</h1>
+                                            <p style="
+                                                font-size: 1.25rem; 
+                                                color: #4b5563; 
+                                                font-weight: 600;
+                                                margin-top: 0.5rem;
+                                            ">Build In Public 活动证书</p>
+                                        </div>
+                                        
+                                        <!-- 内容 -->
+                                        <div style="
+                                            flex: 1;
+                                            display: flex;
+                                            flex-direction: column;
+                                            justify-content: center;
+                                            align-items: center;
+                                            width: 100%;
+                                            padding: 20px 0;
+                                        ">
+                                            <div style="
+                                                width: 100%;
+                                                max-width: 560px;
+                                                text-align: center;
+                                            ">
+                                                <div style="margin-bottom: 1rem;">
+                                                    <span style="font-size: 1.4rem; font-weight: bold; color: #1f2937;">获奖者：</span>
+                                                    <span style="font-size: 1.4rem; font-weight: 800; color: #7c3aed;">${nickname}</span>
+                                                </div>
+                                                <div style="margin-bottom: 1rem;">
+                                                    <span style="font-size: 1rem; color: #374151;">参与期数：</span>
+                                                    <span style="font-size: 1rem; font-weight: bold; color: #7c3aed;">${period}</span>
+                                                </div>
+                                                <div style="font-size: 1rem; color: #374151; line-height: 1.8; text-align: left; padding: 0 20px;">
+                                                    <p>${cerContent}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 底部 -->
+                                        <div style="
+                                            width: 100%;
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: flex-end;
+                                        ">
+                                            <div>
+                                                <img src="${logoBase64 || '/certificate/public/img/logo.png'}" alt="hackathonweekly" style="width: 120px; height: auto; display: block;"/>
+                                            </div>
+                                            <div style="
+                                                text-align: right;
+                                                color: #6b7280;
+                                                font-size: 0.875rem;
+                                            ">
+                                                <div>hackathonweekly 社区</div>
+                                                <div>${new Date().getFullYear()}年${new Date().getMonth()+1}月${new Date().getDate()}日</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        document.body.appendChild(tempDiv);
+                        console.log('创建临时证书元素成功', tempDiv);
+                        
+                        // 添加一个按钮方便手动关闭预览
+                        const closeBtn = document.createElement('button');
+                        closeBtn.textContent = '关闭预览';
+                        closeBtn.style.position = 'fixed';
+                        closeBtn.style.left = '10px';
+                        closeBtn.style.top = (10 + parseInt(iframeHeight) + 10) + 'px';
+                        closeBtn.style.zIndex = '10000';
+                        closeBtn.style.padding = '8px 16px';
+                        closeBtn.style.backgroundColor = '#7c3aed';
+                        closeBtn.style.color = 'white';
+                        closeBtn.style.border = 'none';
+                        closeBtn.style.borderRadius = '6px';
+                        closeBtn.style.cursor = 'pointer';
+                        closeBtn.style.fontWeight = 'bold';
+                        closeBtn.onclick = function() {
+                            document.body.removeChild(tempDiv);
+                            document.body.removeChild(closeBtn);
+                            if (document.body.contains(previewDiv)) document.body.removeChild(previewDiv);
+                            document.head.removeChild(tempStyle);
+                        };
+                        document.body.appendChild(closeBtn);
+                        
+                        // 创建预览区域
+                        const previewDiv = document.createElement('div');
+                        previewDiv.style.position = 'fixed';
+                        previewDiv.style.right = '10px';
+                        previewDiv.style.top = '10px';
+                        previewDiv.style.backgroundColor = 'white';
+                        previewDiv.style.padding = '10px';
+                        previewDiv.style.borderRadius = '8px';
+                        previewDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                        previewDiv.style.zIndex = '10000';
+                        previewDiv.innerHTML = '<div style="font-size:14px;margin-bottom:8px;font-weight:bold;text-align:center;">截图预览</div>';
+                        document.body.appendChild(previewDiv);
+                        
+                        // 使用html2canvas截取临时div
+                        try {
+                            console.log('等待渲染完成');
+                            await new Promise(resolve => setTimeout(resolve, 1000)); // 给浏览器更多时间渲染
+                            console.log('开始截图');
+                            
+                            const captureElement = document.getElementById('certificate-capture');
+                            console.log('截图元素:', captureElement);
+                            
+                            const canvas = await html2canvas(captureElement, {
+                                scale: 2, // 提高清晰度
+                                useCORS: true, // 允许跨域
+                                allowTaint: true, // 允许渲染跨域图片
+                                logging: true, // 开启日志
+                                backgroundColor: null, // 透明背景
+                                onclone: function(clonedDoc) {
+                                    console.log('DOM被克隆');
+                                    // 处理克隆文档中的元素
+                                    const clonedElement = clonedDoc.getElementById('certificate-capture');
+                                    if (clonedElement) {
+                                        console.log('克隆后的元素已找到');
+                                    }
+                                }
+                            });
+                            
+                            console.log('截图完成，准备下载:', canvas);
+                            // 下载图片
+                            const imageData = canvas.toDataURL('image/png');
+                            console.log('图片数据生成成功');
+                            
+                            // 预览图片
+                            const previewImg = document.createElement('img');
+                            previewImg.src = imageData;
+                            previewImg.style.maxWidth = '300px';
+                            previewImg.style.maxHeight = '400px';
+                            previewImg.style.border = '1px solid #e5e7eb';
+                            previewImg.style.borderRadius = '4px';
+                            previewDiv.appendChild(previewImg);
+                            
+                            // 添加下载按钮
+                            const downloadBtn = document.createElement('button');
+                            downloadBtn.textContent = '下载图片';
+                            downloadBtn.style.width = '100%';
+                            downloadBtn.style.marginTop = '8px';
+                            downloadBtn.style.padding = '6px 12px';
+                            downloadBtn.style.backgroundColor = '#7c3aed';
+                            downloadBtn.style.color = 'white';
+                            downloadBtn.style.border = 'none';
+                            downloadBtn.style.borderRadius = '4px';
+                            downloadBtn.style.cursor = 'pointer';
+                            downloadBtn.onclick = function() {
+                                // 使用完全相同的图片数据
+                                const a = document.createElement('a');
+                                a.href = imageData;
+                                a.download = `certificate_${nickname}_${new Date().getTime()}.png`;
+                                a.click();
+                            };
+                            previewDiv.appendChild(downloadBtn);
+                            
+                            // 添加复制到剪贴板按钮
+                            const copyBtn = document.createElement('button');
+                            copyBtn.textContent = '复制图片';
+                            copyBtn.style.width = '100%';
+                            copyBtn.style.marginTop = '8px';
+                            copyBtn.style.padding = '6px 12px';
+                            copyBtn.style.backgroundColor = '#4b5563';
+                            copyBtn.style.color = 'white';
+                            copyBtn.style.border = 'none';
+                            copyBtn.style.borderRadius = '4px';
+                            copyBtn.style.cursor = 'pointer';
+                            copyBtn.onclick = async function() {
+                                try {
+                                    // 尝试将图片复制到剪贴板
+                                    canvas.toBlob(async function(blob) {
+                                        try {
+                                            const item = new ClipboardItem({ 'image/png': blob });
+                                            await navigator.clipboard.write([item]);
+                                            alert('图片已复制到剪贴板，可以直接粘贴使用');
+                                        } catch (e) {
+                                            console.error('复制到剪贴板失败:', e);
+                                            alert('复制失败，请使用下载按钮保存图片');
+                                        }
+                                    });
+                                } catch (e) {
+                                    console.error('准备剪贴板数据失败:', e);
+                                    alert('复制失败，请使用下载按钮保存图片');
+                                }
+                            };
+                            previewDiv.appendChild(copyBtn);
+                            
+                            // 自动下载 - 使用相同的图片数据
+                            setTimeout(() => {
+                                const a = document.createElement('a');
+                                a.href = imageData;
+                                a.download = `certificate_${nickname}_${new Date().getTime()}.png`;
+                                a.click();
+                            }, 500); // 稍微延迟下载，确保UI先渲染完成
+                            
+                            return;
+                        } catch (err) {
+                            console.error('临时div截图失败:', err);
+                            alert('截图失败: ' + err.message);
+                            // 不要自动清理，保留用于查看问题
+                        }
+                    }
+                    
+                    // 如果上面的方法失败，使用消息传递方式
+                    console.log('使用消息传递方式尝试截图');
+                    certificateFrame.contentWindow.postMessage('captureImage', '*');
+                    
+                    // 提示信息，在5秒后显示
+                    const timeoutId = setTimeout(() => {
+                        alert('如果长时间没有出现下载提示，请尝试在新标签页中打开证书，然后使用浏览器的"打印"功能，选择"另存为PDF"或"另存为图片"。');
+                    }, 5000);
+                    
+                    // 保存超时ID
+                    window._screenshotTimeoutId = timeoutId;
+                    
+                } catch (error) {
+                    console.error('截图过程出错:', error);
+                    alert('截图失败: ' + error.message + '\n请尝试使用浏览器的打印功能将证书保存为PDF或图片。');
+                }
+            }
+            
+            // 监听来自iframe的消息
+            window.addEventListener('message', async function(event) {
+                console.log('收到消息:', event.data);
+                if (event.data && event.data.type === 'certificateImage' && event.data.imageData) {
+                    console.log('收到图片数据，准备下载');
+                    
+                    // 清除超时警告
+                    if (window._screenshotTimeoutId) {
+                        clearTimeout(window._screenshotTimeoutId);
+                    }
+                    
+                    // 收到iframe传来的图片数据，下载图片
+                    const a = document.createElement('a');
+                    a.href = event.data.imageData;
+                    a.download = `certificate_${nicknameInput.value}_${new Date().getTime()}.png`;
+                    a.click();
+                }
+            });
+        });
+    </script>
+    </body>
+</html>
+
