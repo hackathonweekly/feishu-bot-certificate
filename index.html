@@ -695,7 +695,25 @@
             queryBtn.addEventListener('click', queryCertificate);
 
             // 保存图片按钮点击事件
-            saveImageBtn.addEventListener('click', saveCertificateAsImage);
+            saveImageBtn.addEventListener('click', function() {
+                // 获取当前iframe的参数
+                const certificateFrame = document.getElementById('certificateFrame');
+                const iframeUrl = new URL(certificateFrame.src, window.location.origin);
+                const params = new URLSearchParams(iframeUrl.search);
+
+                const period = params.get('period');
+                const nickname = params.get('nickname');
+                const cerContent = params.get('cerContent');
+
+                if (!period || !nickname || !cerContent) {
+                    alert('请先查询证书');
+                    return;
+                }
+
+                // 跳转到/certificate?period=...&nickname=...&cerContent=...&autoSave=1
+                params.set('autoSave', '1');
+                window.location.href = '/certificate?' + params.toString();
+            });
 
             // 预加载 html2canvas 库
             function loadHtml2Canvas() {

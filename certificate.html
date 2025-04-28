@@ -57,8 +57,9 @@
       justify-content: center;
     }
     .award-inner {
+      width: 1000px;
+      height: 700px;
       position: relative;
-      width: 100vw;
       max-width: 1000px;
       aspect-ratio: 1.43/1;
       min-width: 320px;
@@ -68,16 +69,13 @@
       align-items: center;
       justify-content: space-between;
       margin: auto;
-      background: none;
-      box-shadow: none;
-      border-radius: 0;
+      background: linear-gradient(180deg, #dbeafe 0%, #f3e8ff 100%);
+      box-shadow: 0 8px 32px rgba(80,60,180,0.10);
+      border-radius: 24px;
       padding: 0;
     }
-    @media (max-width: 900px) {
-      .award-inner {
-        max-width: 98vw;
-        min-width: unset;
-      }
+    @media (max-width: 1100px) {
+      .award-inner { width: 98vw; height: auto; }
     }
     @media (max-width: 600px) {
       .award-inner {
@@ -89,11 +87,11 @@
   </style>
 </head>
 <body>
-  <!-- 渐变色块装饰 -->
-  <div class="award-bg blob1"></div>
-  <div class="award-bg blob2"></div>
   <div class="award-content">
-    <div class="award-inner fade-in">
+    <!-- 渐变色块装饰 -->
+    <div class="award-bg blob1"></div>
+    <div class="award-bg blob2"></div>
+    <div class="award-inner" id="capture-area">
       <!-- 标题 -->
       <div class="w-full text-center mt-10">
         <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-purple-600 to-purple-300 bg-clip-text text-transparent tracking-wide mb-2 select-none">Build In Public 电子奖状</h1>
@@ -145,7 +143,7 @@
       const nickname = getQueryParam('nickname');
       const cerContent = getQueryParam('cerContent');
       if (period && nickname && cerContent) {
-        document.getElementById('subtitle').textContent = 'Build In Public 活动证书';
+        document.getElementById('subtitle').textContent = '';
         document.getElementById('defaultDesc').style.display = 'none';
         document.getElementById('certBlock').style.display = '';
         document.getElementById('nickname').textContent = nickname;
@@ -160,68 +158,70 @@
         document.getElementById('certBlock').style.display = 'none';
       }
     }
-    showCertificate();
+    window.addEventListener('DOMContentLoaded', function() {
+      showCertificate();
+
+      // 检查 autoSave 参数
+      if (getQueryParam('autoSave') === '1') {
+        setTimeout(() => {
+          captureScreenshot();
+        }, 600); // 稍微延迟，确保渲染完成
+      }
+    });
     
     // 截图功能
     async function captureScreenshot() {
       try {
-        console.log('开始截图过程');
-        // 等待动画完成
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        console.log('开始捕获DOM');
+        // 截图前将标题样式改为纯色
+        const title = document.querySelector('h1');
+        const oldClass = title.className;
+        title.className = 'text-5xl font-extrabold text-purple-600 tracking-wide mb-2 select-none';
 
-        // 对可能有跨域问题的图片进行特殊处理
+        // 检查目标元素
+        const award = document.getElementById('capture-area');
+        console.log('award:', award, award.offsetWidth, award.offsetHeight, window.getComputedStyle(award).display);
+
+        // 检查图片加载
         const images = document.querySelectorAll('img');
-        images.forEach(img => {
-          try {
-            // 尝试将图片转为base64内联方式
-            if (img.complete && img.naturalWidth !== 0) {
-              const canvas = document.createElement('canvas');
-              canvas.width = img.naturalWidth;
-              canvas.height = img.naturalHeight;
-              const ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0);
-              // 将图片转为data URL
-              try {
-                const dataURL = canvas.toDataURL('image/png');
-                img.setAttribute('src', dataURL);
-              } catch (e) {
-                console.warn('无法转换图片:', e);
-              }
-            }
-          } catch (e) {
-            console.warn('处理图片失败:', e);
+        for (let img of images) {
+          if (!img.complete || img.naturalWidth === 0) {
+            console.warn('图片未加载完成:', img.src);
           }
-        });
-        
-        // 使用html2canvas捕获整个证书
-        const award = document.querySelector('.award-inner');
+        }
+
+        // 等待更久
+        await new Promise(resolve => setTimeout(resolve, 1200));
+
+        // 截图
         const canvas = await html2canvas(award, {
-          scale: 2, // 更高分辨率
-          useCORS: true, // 允许加载跨域图片
-          allowTaint: true, // 允许跨域图片渲染
-          backgroundColor: null, // 透明背景
-          logging: true, // 启用日志以便调试
-          onclone: function(clonedDoc) {
-            console.log('DOM被克隆');
-            // 在克隆的DOM中处理图片
-            const clonedImages = clonedDoc.querySelectorAll('img');
-            clonedImages.forEach(img => img.setAttribute('crossorigin', 'anonymous'));
-          }
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#fff', // 或 null
+          logging: true
         });
         
         console.log('转换为图片数据');
         // 转换为图片数据
         const imageData = canvas.toDataURL('image/png');
         
-        console.log('准备发送图片数据回父窗口');
-        // 将图片数据发送回父窗口
-        window.parent.postMessage({
-          type: 'certificateImage',
-          imageData: imageData
-        }, '*');
-        console.log('已发送图片数据');
+        // 截图后恢复标题样式
+        title.className = oldClass;
+        
+        // 判断是否在 iframe 里
+        if (window.self === window.top) {
+          // 顶层页面，直接下载
+          const a = document.createElement('a');
+          a.href = imageData;
+          a.download = `certificate_${getQueryParam('nickname') || ''}_${Date.now()}.png`;
+          a.click();
+        } else {
+          // 在 iframe 里，发消息给父窗口
+          window.parent.postMessage({
+            type: 'certificateImage',
+            imageData: imageData
+          }, '*');
+        }
       } catch (error) {
         console.error('截图失败:', error);
         alert('截图失败: ' + error.message);
