@@ -1,10 +1,14 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+// 标记此页面为动态渲染，阻止在构建时预渲染
+export const dynamic = 'force-dynamic';
+
+import React, { useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Script from 'next/script';
 
-export default function CertificatePage() {
+// 创建一个内部组件来使用useSearchParams
+function CertificateContent() {
     const searchParams = useSearchParams();
     const period = searchParams.get('period');
     const nickname = searchParams.get('nickname');
@@ -283,6 +287,22 @@ export default function CertificatePage() {
                 </div>
             </div>
         </>
+    );
+}
+
+// 使用Suspense包装需要useSearchParams的组件
+export default function CertificatePage() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center h-screen w-screen bg-gradient-to-b from-[#dbeafe] to-[#f3e8ff]">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold text-purple-600 mb-4">加载中...</h2>
+                    <p className="text-gray-600">证书内容正在准备中，请稍候...</p>
+                </div>
+            </div>
+        }>
+            <CertificateContent />
+        </Suspense>
     );
 }
 
