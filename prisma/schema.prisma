@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Period {
+  id           Int           @id @default(autoincrement())
+  period_name  String        @unique @db.VarChar(50)
+  start_date   DateTime
+  end_date     DateTime
+  status       String        @db.VarChar(20) // 报名中/进行中/已结束
+  signup_link  String?       @db.VarChar(500) // 存储接龙链接
+  signups      Signup[]
+  certificates Certificate[]
+
+  @@map("periods")
+}
+
+model Signup {
+  id           Int       @id @default(autoincrement())
+  period_id    Int
+  nickname     String    @db.VarChar(50)
+  focus_area   String?   @db.Text
+  introduction String?   @db.Text
+  goals        String?   @db.Text
+  signup_time  DateTime  @default(now())
+  period       Period    @relation(fields: [period_id], references: [id])
+  checkins     Checkin[]
+
+  @@unique([period_id, nickname])
+  @@map("signups")
+}
+
+model Checkin {
+  id           Int      @id @default(autoincrement())
+  signup_id    Int
+  nickname     String   @db.VarChar(100)
+  checkin_date DateTime @db.Date
+  content      String   @db.Text
+  created_at   DateTime @default(now())
+  checkin_count Int?
+  signup       Signup   @relation(fields: [signup_id], references: [id])
+
+  @@map("checkins")
+}
+
+model Certificate {
+  period_id   Int
+  nickname    String    @db.VarChar(50)
+  cer_content String?   @db.VarChar(255)
+  period      Period    @relation(fields: [period_id], references: [id])
+
+  @@id([period_id, nickname])
+  @@map("certificate")
+} 
