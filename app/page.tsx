@@ -21,7 +21,7 @@ export default function Home() {
                 if (response.ok) {
                     const data = await response.json();
                     // 按 id 降序排序
-                    data.sort((a: any, b: any) => b.id - a.id);
+                    data.sort((a: any, b: any) => a.id - b.id);
                     setPeriods(data);
                     // 自动选择第一个活动期作为默认值
                     if (data.length > 0) {
